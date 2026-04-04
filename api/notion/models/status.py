@@ -9,5 +9,5 @@ class Status(Enum):
     EXPIRES_2 = "Expires in 2 days"
     EXPIRES_1 = "Expires in 1 day"
     EXPIRED = "Expired"
-    ACTIVE = "Aktiv"
+    ACTIVE = "Active"
     OPEN = "Open"
