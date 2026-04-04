@@ -5,7 +5,7 @@ class NotionClient:
     BASE_URL = "https://api.notion.com/v1"
 
     def __init__(self, secret=None):
-        self.secret = secret or os.getenv('SECRET')
+        self.secret = secret or os.environ['NOTION_SECRET']
         self.headers = {
             "Notion-Version": "2022-06-28",
             "Authorization": f"Bearer {self.secret}",

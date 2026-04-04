@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 from functions.calc.calcFunctions import CalcFunction
 from functions.notifications.sendNotification import MailNotification
 from api.notion.client import NotionClient
@@ -8,17 +7,15 @@ from api.notion.models.mail_templates import MailTemplate
 from api.notion import databases
 from api.notion import pages
 
-load_dotenv()
-
-DATABASE_ID = os.getenv('DATABASE_ID')
+NOTION_DATABASE_ID = os.environ['NOTION_DATABASE_ID']
 
 client = NotionClient()
 mail = MailNotification(
-    sender_email=os.getenv('EMAIL'),
-    password=os.getenv('PWD')
+    sender_email=os.environ['GOOGLE_MAIL'],
+    password=os.environ['GOOGLE_APP_PWD']
 )
 
-db_entries = databases.getDatabase(client, DATABASE_ID)['results']
+db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
 print(db_entries)
 
 for entry in db_entries:
@@ -56,6 +53,6 @@ for entry in db_entries:
         }
         mail.sendNotification(
             status=new_status,
-            reciver_email=os.getenv('EMAIL'),
+            reciver_email=os.environ['EMAIL'],
             context=context
         )
