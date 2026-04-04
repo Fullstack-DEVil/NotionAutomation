@@ -53,6 +53,6 @@ for entry in db_entries:
         }
         mail.sendNotification(
             status=new_status,
-            reciver_email=os.environ['EMAIL'],
+            reciver_email=os.environ['GOOGLE_MAIL'],
             context=context
         )
