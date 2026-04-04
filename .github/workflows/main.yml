@@ -25,9 +25,9 @@ jobs:
 
       - name: Run Script
         env:
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_SECRET }}
-          NOTION_SECRET: ${{ secrets.NOTION_DATABASE_ID }}
-          GOOGLE_MAIL: ${{ secrets.GOOGLE_MAI }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          GOOGLE_MAIL: ${{ secrets.GOOGLE_MAIL }}
           GOOGLE_APP_PWD: ${{ secrets.GOOGLE_APP_PWD }}
         run: python -m scripts.overviewAutomation
   
