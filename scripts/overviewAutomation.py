@@ -19,14 +19,15 @@ db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
 print(db_entries)
 
 for entry in db_entries:
-    date = entry['properties']['Ablaufdatum']['date']['start']
+    end_date = entry['properties']['Ablaufdatum']['date']['start']
+    start_date = entry['properties']['Ablaufdatum']['date']['start']
     product = entry['properties']['Produkt']['title'][0]['text']['content']
     page_id = entry['id']
 
     current_status = entry['properties']['Status']['status']['name']
     new_status = None
 
-    days_diff = CalcFunction.getDiffFromNow(date=date)
+    days_diff = CalcFunction.getDiffFromNow(date=end_date)
     if current_status == 'Active' or current_status.startswith('Expires'):
         if days_diff == 30:
             new_status = Status.EXPIRES_30
