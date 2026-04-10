@@ -16,7 +16,7 @@ mail = MailNotification(
 )
 
 db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
-print(db_entries)
+#print(db_entries)
 
 for entry in db_entries:
     end_date = entry['properties']['Ablaufdatum']['date']['start']
@@ -57,6 +57,6 @@ for entry in db_entries:
         }
         mail.sendNotification(
             status=new_status,
-            reciver_email=os.environ['EMAIL'],
+            reciver_email=os.environ['GOOGLE_MAIL'],
             context=context
         )
