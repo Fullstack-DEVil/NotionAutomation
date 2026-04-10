@@ -45,12 +45,15 @@ for entry in db_entries:
             new_status = Status.EXPIRES_1
         else:
             print(f'Id: {page_id} - Status: {Status.ACTIVE.value} - Expired in {days_diff} day(s)')
+    elif current_status == 'Open' and CalcFunction.getDiffFromNow(date=start_date) == 0:
+        pages.setPageStatus(client, page_id, Status.ACTIVE.value)
+        print(f'Id: {page_id} - Status Changed from OPEN to ACTIVE')
     
     if new_status and new_status.value != current_status:
         pages.setPageStatus(client, page_id, new_status.value)
         context = {
             "Produkt": product,
-            "Ablaufdatum": date
+            "Ablaufdatum": end_date
         }
         mail.sendNotification(
             status=new_status,
