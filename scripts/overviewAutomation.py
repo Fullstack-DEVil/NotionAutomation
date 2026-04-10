@@ -16,7 +16,6 @@ mail = MailNotification(
 )
 
 db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
-#print(db_entries)
 
 for entry in db_entries:
     end_date = entry['properties']['Ablaufdatum']['date']['start']
