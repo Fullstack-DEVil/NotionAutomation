@@ -27,7 +27,6 @@ for entry in db_entries:
     new_status = None
 
     days_diff = CalcFunction.getDiffFromNow(date=end_date)
-    print(CalcFunction.getDiffFromNow(date=start_date))
     if current_status == 'Active' or current_status.startswith('Expires'):
         if days_diff == 30:
             new_status = Status.EXPIRES_30
@@ -45,7 +44,7 @@ for entry in db_entries:
             new_status = Status.EXPIRES_1
         else:
             print(f'Id: {page_id} - Status: {Status.ACTIVE.value} - Expired in {days_diff} day(s)')
-    elif current_status == 'Open': #and CalcFunction.getDiffFromNow(date=start_date) == 0:
+    elif current_status == 'Open' and CalcFunction.getDiffFromNow(date=start_date) == 0:
         pages.setPageStatus(client, page_id, Status.ACTIVE.value)
         print(f'Id: {page_id} - Status Changed from OPEN to ACTIVE')
     
