@@ -27,6 +27,7 @@ for entry in db_entries:
     new_status = None
 
     days_diff = CalcFunction.getDiffFromNow(date=end_date)
+    print(CalcFunction.getDiffFromNow(date=start_date))
     if current_status == 'Active' or current_status.startswith('Expires'):
         if days_diff == 30:
             new_status = Status.EXPIRES_30
