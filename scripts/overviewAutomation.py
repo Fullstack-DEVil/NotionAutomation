@@ -19,7 +19,7 @@ db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
 
 for entry in db_entries:
     end_date = entry['properties']['Ablaufdatum']['date']['start']
-    start_date = entry['properties']['Ablaufdatum']['date']['start']
+    start_date = entry['properties']['Startdatum']['date']['start']
     product = entry['properties']['Produkt']['title'][0]['text']['content']
     page_id = entry['id']
 
