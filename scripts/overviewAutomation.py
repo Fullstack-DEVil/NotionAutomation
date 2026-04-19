@@ -43,10 +43,18 @@ for entry in db_entries:
         elif days_diff == 1:
             new_status = Status.EXPIRES_1
         else:
+            #TODO: Implement Logging
             print(f'Id: {page_id} - Status: {Status.ACTIVE.value} - Expired in {days_diff} day(s)')
     elif current_status == 'Open' and CalcFunction.getDiffFromNow(date=start_date) == 0:
         pages.setPageStatus(client, page_id, Status.ACTIVE.value)
+        #TODO: Implement Logging
+        #TODO: Implement Nootification for changing Status from OPEN to ACTIVE
         print(f'Id: {page_id} - Status Changed from OPEN to ACTIVE')
+    elif current_status == 'Expired' and CalcFunction.getDiffFromNow(date=end_date) < -3:
+        #TODO: Implement Logging
+        #TODO: Implement Implement Delete Function
+        pages.deletePage(client, page_id)
+        print(f'Id: {page_id} - Deleted because of expired')
     
     if new_status and new_status.value != current_status:
         pages.setPageStatus(client, page_id, new_status.value)

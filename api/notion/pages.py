@@ -13,3 +13,13 @@ def setPageStatus(client, page_id, status):
         f"pages/{page_id}",
         payload
     )
+
+def deletePage(client, page_id):
+    payload = {
+        "in_trash": True
+    }
+    return client.request(
+        "PATCH",
+        f"pages/{page_id}",
+        payload
+    )
