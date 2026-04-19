@@ -15,55 +15,68 @@ mail = MailNotification(
     password=os.environ['GOOGLE_APP_PWD']
 )
 
-db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
+print(f"🚀 Script started")
 
-for entry in db_entries:
-    end_date = entry['properties']['Ablaufdatum']['date']['start']
-    start_date = entry['properties']['Startdatum']['date']['start']
-    product = entry['properties']['Produkt']['title'][0]['text']['content']
-    page_id = entry['id']
-
-    current_status = entry['properties']['Status']['status']['name']
-    new_status = None
-
-    days_diff = CalcFunction.getDiffFromNow(date=end_date)
-    if current_status == 'Active' or current_status.startswith('Expires'):
-        if days_diff == 30:
-            new_status = Status.EXPIRES_30
-        elif days_diff == 15:
-            new_status = Status.EXPIRES_15
-        elif days_diff == 10:
-            new_status = Status.EXPIRES_10
-        elif days_diff == 5:
-            new_status = Status.EXPIRES_5
-        elif days_diff == 3:
-            new_status = Status.EXPIRES_3
-        elif days_diff == 2:
-            new_status = Status.EXPIRES_2
-        elif days_diff == 1:
-            new_status = Status.EXPIRES_1
-        else:
-            #TODO: Implement Logging
-            print(f'Id: {page_id} - Status: {Status.ACTIVE.value} - Expired in {days_diff} day(s)')
-    elif current_status == 'Open' and CalcFunction.getDiffFromNow(date=start_date) == 0:
-        pages.setPageStatus(client, page_id, Status.ACTIVE.value)
-        #TODO: Implement Logging
-        #TODO: Implement Nootification for changing Status from OPEN to ACTIVE
-        print(f'Id: {page_id} - Status Changed from OPEN to ACTIVE')
-    elif current_status == 'Expired' and CalcFunction.getDiffFromNow(date=end_date) < -3:
-        #TODO: Implement Logging
-        #TODO: Implement Implement Delete Function
-        pages.deletePage(client, page_id)
-        print(f'Id: {page_id} - Deleted because of expired')
+try:
+    db_entries = databases.getDatabase(client, NOTION_DATABASE_ID)['results']
+    print(f"📊 Loaded {len(db_entries)} database entries")
+except Exception as e:
+    print(f"❌ Failed to load database entries: {e}")
+    raise
     
-    if new_status and new_status.value != current_status:
-        pages.setPageStatus(client, page_id, new_status.value)
-        context = {
-            "Produkt": product,
-            "Ablaufdatum": end_date
-        }
-        mail.sendNotification(
-            status=new_status,
-            reciver_email=os.environ['GOOGLE_MAIL'],
-            context=context
-        )
+for entry in db_entries:
+    try:
+        end_date = entry['properties']['Ablaufdatum']['date']['start']
+        start_date = entry['properties']['Startdatum']['date']['start']
+        product = entry['properties']['Produkt']['title'][0]['text']['content']
+        page_id = entry['id']
+
+        current_status = entry['properties']['Status']['status']['name']
+        new_status = None
+
+        days_diff = CalcFunction.getDiffFromNow(date=end_date)
+
+        print(f"Processing entry | Product: {product} | Page ID: {page_id} | Status: {current_status} | Days remaining: {days_diff}")
+
+        if current_status == 'Active' or current_status.startswith('Expires'):
+            if days_diff == 30:
+                new_status = Status.EXPIRES_30
+            elif days_diff == 15:
+                new_status = Status.EXPIRES_15
+            elif days_diff == 10:
+                new_status = Status.EXPIRES_10
+            elif days_diff == 5:
+                new_status = Status.EXPIRES_5
+            elif days_diff == 3:
+                new_status = Status.EXPIRES_3
+            elif days_diff == 2:
+                new_status = Status.EXPIRES_2
+            elif days_diff == 1:
+                new_status = Status.EXPIRES_1
+            else:
+                print(f"No status change | Product: {product} | Days remaining: {days_diff}")
+        elif current_status == 'Open' and CalcFunction.getDiffFromNow(date=start_date) == 0:
+            pages.setPageStatus(client, page_id, Status.ACTIVE.value)
+            print(f"Status updated | Product: {product} | Page ID: {page_id} | OPEN → ACTIVE")
+        elif current_status == 'Expired' and CalcFunction.getDiffFromNow(date=end_date) < -3:
+            pages.deletePage(client, page_id)
+            print(f"Page deleted | Product: {product} | Page ID: {page_id} | Reason: Expired")
+        
+        if new_status and new_status.value != current_status:
+            pages.setPageStatus(client, page_id, new_status.value)
+            print(f"Status changed | Product: {product} | Page ID: {page_id} | {current_status} → {new_status.value}")
+            
+            context = {
+                "Produkt": product,
+                "Ablaufdatum": end_date
+            }
+
+            mail.sendNotification(
+                status=new_status,
+                reciver_email=os.environ['GOOGLE_MAIL'],
+                context=context
+            )
+
+            print(f"Notification sent | Product: {product} | Page ID: {page_id}")
+    except Exception as e:
+        print(f"Error: {e}", exc_info=True)
