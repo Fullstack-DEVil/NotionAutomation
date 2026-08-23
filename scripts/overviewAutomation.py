@@ -11,7 +11,7 @@ NOTION_DATABASE_ID = os.environ['NOTION_DATABASE_ID']
 
 client = NotionClient()
 mail = MailNotification(
-    sender_email=os.environ['SMTP_MAIL'],
+    sender_email=os.environ['SENDER_MAIL'],
     smtp_login=os.environ['SMTP_LOGIN'],
     password=os.environ['SMTP_PWD']
 )
