@@ -29,7 +29,7 @@ jobs:
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
           RECEIVER_MAIL: ${{ secrets.RECEIVER_MAIL }}
           SENDER_MAIL: ${{ secrets.SENDER_MAIL }}
-          SMTP_MAIL: ${{ secrets.SMTP_MAIL }}
+          SMTP_LOGIN: ${{ secrets.SMTP_LOGIN }}
           SMTP_PWD: ${{ secrets.SMTP_PWD }}
         run: python -m scripts.overviewAutomation
   
