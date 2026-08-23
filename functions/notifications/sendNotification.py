@@ -7,8 +7,9 @@ from api.notion.models.status import Status
 
 class MailNotification:
 
-    def __init__(self, sender_email, password):
+    def __init__(self, sender_email, smtp_login, password):
         self.sender_email = sender_email
+        self.smtp_login = smtp_login
         self.password = password
 
     def getTemplate(self, status: Status):
@@ -38,13 +39,13 @@ class MailNotification:
         try:
             with smtplib.SMTP("smtp-relay.brevo.com", 587) as server:
                 server.starttls()
-                server.login(self.sender_email, self.password)
+                server.login(self.smtp_login, self.password)
                 server.send_message(msg)
             print("Email erfolgreich gesendet.")
         except Exception as e:
             print(f"Fehler: {e}")
 
-    def sendNotification(self, status: Status, reciver_email, context: dict):
+    def sendNotification(self, status: Status, receiver_email, context: dict):
         template = self.getTemplate(status)
 
         if not template:
@@ -53,4 +54,4 @@ class MailNotification:
         
         subject, body = self.renderTemplate(template, context)
 
-        self.sendEmail(subject, body, reciver_email)
+        self.sendEmail(subject, body, receiver_email)
