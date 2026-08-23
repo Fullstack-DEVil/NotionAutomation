@@ -37,7 +37,7 @@ class MailNotification:
         msg.attach(MIMEText(message, "plain"))
 
         try:
-            with smtplib.SMTP("smtp-relay.brevo.com", 587) as server:
+            with smtplib.SMTP("smtp.gmail.com", 587) as server:
                 server.starttls()
                 server.login(self.smtp_login, self.password)
                 server.send_message(msg)
