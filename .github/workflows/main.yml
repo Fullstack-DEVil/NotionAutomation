@@ -27,7 +27,8 @@ jobs:
         env:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
-          GOOGLE_MAIL: ${{ secrets.GOOGLE_MAIL }}
-          GOOGLE_APP_PWD: ${{ secrets.GOOGLE_APP_PWD }}
+          RECIVER_MAIL: ${{ secrets.RECIVER_MAIL }}
+          SMTP_MAIL: ${{ secrets.SMTP_MAIL }}
+          SMTP_PWD: ${{ secrets.SMTP_PWD }}
         run: python -m scripts.overviewAutomation
   

@@ -11,8 +11,8 @@ NOTION_DATABASE_ID = os.environ['NOTION_DATABASE_ID']
 
 client = NotionClient()
 mail = MailNotification(
-    sender_email=os.environ['GOOGLE_MAIL'],
-    password=os.environ['GOOGLE_APP_PWD']
+    sender_email=os.environ['SMTP_MAIL'],
+    password=os.environ['SMTP_PWD']
 )
 
 print(f"🚀 Script started")
@@ -73,7 +73,7 @@ for entry in db_entries:
 
             mail.sendNotification(
                 status=new_status,
-                reciver_email=os.environ['GOOGLE_MAIL'],
+                reciver_email=os.environ['RECIVER_MAIL'],
                 context=context
             )
 
